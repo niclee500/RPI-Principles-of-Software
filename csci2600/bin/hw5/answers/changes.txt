@@ -1,0 +1,14 @@
+Made Edge class extend Comparable and implemented compareTo function.
+	I made this change so I could use edges in a TreeSet and have them be automatically
+	sorted by start, then end, then label. It also allowed me to remove/comment out the 
+	equals and hashCode methods, which were far more likely to screw up and cause problems.
+
+Made Graph store collection of edges as a TreeSet instead of a LinkedHashSet.
+	The access speed to each edge is slightly slower, but a lot of the actual functionality
+	comes from iterating through the whole edge list, which would be the same speed for 
+	TreeSet and LinkedHashSet. The main reason I changed it though was so the edges would be
+	sorted the path finding algorithm would always hit the correct nodes/edges first and 
+	so any repeat node or edge can be disregarded without having to check if its ends and label
+	are actually alphabetically before/after the previously discovered path.
+
+

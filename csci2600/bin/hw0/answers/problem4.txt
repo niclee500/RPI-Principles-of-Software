@@ -1,0 +1,32 @@
+What is wrong with Ball.java?
+	In the constructor the input variable was given the same name as the member variable, so the two variables
+	weren't clear or distinct. Because of this, the constructor just sets the input variable equal to itself
+	but never actually accesses/sets the member variable. 
+	Also, the getVolume method just returned 0 instead of the value of the actual volume variable.
+	
+	
+There are two obvious approaches for implementing getVolume():
+1. Every time getVolume() is called, go through all the Balls in the Set and add up the volumes. (Hint: one solution might use a for-each loop to extract Balls from the Set.)
+2. Keep track of the total volume of the Balls in BallContainer whenever Balls are added and removed. This eliminates the need to perform any computations when getVolume is called.
+Which approach do you think is the better one? Why?
+	I think the second method is better. The first approach is long and tedious and requires the method to look at every ball every single time,
+	which takes O(n) time every time it's called. Adding/subtracting the volume when balls are added or removed adds some steps to the add and
+	remove methods, but they just call the ball's getVolume method so it stays pretty simple and only takes O(1) time. 
+	It does require extra memory for a new member variable, but it's just a double so it doesn't use much extra memory.
+	
+
+There are many ways to implement getBallsFromSmallest(). Briefly describe at least two different ways. Your answers should differ in the implementation of Box, not in lower-level
+implementation (for example, using an insertion sort instead of a selection sort is a lower-level implementation because it does not affect how Box is implemented). 
+Hint: think about different places in the Box class where you could add code to achieve the desired functionality.
+Which of the above ways do you think is the best? Why?
+		One possible way would be to modify the iterator() function in Box so that instead of just returning a BallContainer iterator, it overrides the normal iterator methods.
+	When created it would use a BallContainer iterator to search through and find the Ball with the smallest volume in BallContainer, then the hasNext() and next() methods 
+	would use the BallContainer iterator to search through and find a ball with a larger volume and the ball with the next smallest volume, respectively.
+		Another option would be to create a mini class inside Box to implement Comparator<Ball> so that a collection of Ball objects could be sorted easily. Then the 
+	getBallsFromSmallest() method would just start by using an iterator to go through the whole BallContainer and copy the elements/Balls into a List<Ball> for sorting.
+	It would use the mini Comparator class in a normal Collection.sort function to sort the List, and then return an Iterator<Ball> for/pointing at the newly sorted List.
+		Personally I think the second method would work better. The Comparator class is easy to create, copying all the Balls from the BallContainer to the List is fairly trivial,
+	and sorting the collection is incredibly easy. The main drawbacks are that you basically double the memory usage because you have to copy all of the Balls into the List, and
+	that it takes a little bit to do the initial setup (the copying and sorting). However, once it's initially set up/called going from Ball to ball in order is very fast.
+	The first method would be more memory efficient because it wouldn't be copying/creating much (probably only a couple of temporary variables), but it would be very slow 
+	all the way through. The initial setup AND every next() or hasNext() call would require it to search through the entire BallContainer.

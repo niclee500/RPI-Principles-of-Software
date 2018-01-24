@@ -1,0 +1,21 @@
+1. In one brief paragraph, describe your representation. For at least the three representations 
+above and your representation (if it is not one of the ones above), explain an advantage of that 
+representation in a sentence. Given these advantages, briefly explain why you chose the 
+representation you did.
+	My code represents the graph as a collection of edges together with a collection of nodes. 
+	The collection of nodes allows quick and easy access and visualization of what nodes are in the
+	graph, and the collection of edges refers to the nodes while providing extra information.
+	
+	Advantages of other representations:
+	-As a collection of edges
+		Allows for simple representation with minimal memory usage, and is easily visualizable.		
+	-As an adjacency list, in which each node is associated with a list of its outgoing edges.
+		Makes keeping track of nodes and their children, as well as adding new nodes or edges, very fast and easy.
+	-As an adjacency matrix, which explicitly represents, for every pair ⟨A,B⟩ of edges,
+	 whether there is a link from A to B, and how many.
+		Allows the client to have information on all possible edges based on the current nodes, making
+		it very fast and easy to add, check, or remove edges.
+
+
+
+

@@ -1,0 +1,102 @@
+1. Which of the B.m methods below are function subtypes of A.m. 
+For each of the B.m methods answer whether the method would overload or override A.m in Java.
+class A {
+	Object m(X y, String s);
+}
+class B extends A {
+	X m(X y, String s); 							//is a subtype, overrides in Java
+	Y m(Object y, Object s); 						//is a subtype, overloads in Java
+	Object m(X y, String s) throws RuntimeException; //is not a subtype, overloads in Java
+	Z m(Y y, String s); 							//is not a subtype, overloads in Java
+}
+
+2. Given the specifications below, answer whether the extending class is a 
+true subtype of its superclass. Explain your answer.
+
+	a. IsoscelesTriangle is not a true subtype of Triangle. Overridden methods has the same specification 
+	complexity/strength, but has a different actual effect. IsoscelesTriangle doesn't ever use the third 
+	argument so the result will not be what the client expects.
+	
+	class Triangle {
+       // modifies: this
+       // effects: this_post.a=a, this_post.b=b, this_post.c=c
+       void setSides(int a, int b, int c);
+    } 
+    class IsoscelesTriangle extends Triangle {
+       // modifies: this
+       // effects: this_post.a=a, this_post.b=b, this_post.c=b
+       void setSides(int a, int b, int c);
+    }
+
+
+    b. Human is a true subtype of Vertebrate, but Squid is not. The spec for Human is stronger than for 
+    Vertebrate (returns a single specific positive integer vs any positive integer, respectively), so it will 
+    work as expected. Squid's spec is also stronger than Vertebrate's, but it's not in the scope of/doesn't imply
+    the spec of Vertebrate (since Vertebrate expects an integer strictly > 0, and Squid returns 0).
+    
+    abstract class Vertebrate extends Animal {   
+       // returns: an integer > 0 
+       int neckBones();
+    }
+    class Squid extends Vertebrate {
+       // returns: 0 neck bones
+       int neckBones();
+    }
+    class Human extends Vertebrate {
+       // returns: 7 neck bones
+       int neckBones();
+    }
+    
+    
+    c. MountainBike is a true subtype of Bicycle. It doesn't modify any of the original methods or functionality
+    of Bicycle, it just uses the original data and adds extra things. If the client expects a normal Bicycle, 
+    a MountainBike will function exactly as expected because it just uses all of the Bicycle methods without overriding any.
+    
+    class Bicycle {
+       int cadence;
+       int speed;
+       int gear;
+
+       // effects: creates a new Bicycle
+       Bicycle(int startCadence, int startSpeed, int startGear);
+
+       // modifies: this
+       // effects: this_post.cadence=newCadence, this_post.speed=newSpeed, this_post.gear=newGear
+       void setParameters(int newCadence, int newSpeed, int newGear);
+    }
+    class MountainBike extends Bicycle {
+       int height;
+       
+       // effects: creates a new MountainBike
+       MountainBike(int startCadence, int startSpeed, int startGear, int startHeight);
+
+       // modifies: this
+       // effects: this_post.height=newHeight
+       void setHeight(int newHeight);
+    }
+    
+    d. ConcurrentAccount is not a true subtype of Account. Overridden method adds a new exception that isn't
+    in the spec for the base Account method, so it can surprise the client with an unexpected exception.
+    
+    class Account {
+       // modifies: this
+       // effects: this_post.amount = this_pre.amount + d;
+       void deposit(int d);
+    }
+    /* An account that works safely when multiple transactions attempt deposits simultaneously */
+    class ConcurrentAccount extends Account {
+       // modifies: this
+       // effects: this_post.amount = this_pre.amount + d;
+       // throws: AbortException if another transaction is in the process of depositing money
+       void deposit(int d);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

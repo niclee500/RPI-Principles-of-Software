@@ -1,0 +1,266 @@
+//=========================================================================
+PROBLEM 1:
+precondition: a.length = len && 1 <= len
+int sum = a[0];
+int i = 0
+while( i < len-1 )
+	invariant sum = a[0]+...+a[i] && i <= len-1
+{
+	i = i + 1;
+	sum = sum + a[i];
+}
+postcondition: sum = a[0] + ... + a[a.length-1]
+
+Proof:
+a. Before the loop:
+	1 <= len so 0 <= len-1, and i = 0 so i <= len-1
+	sum = a[0]+...+a[i], but i = 0 so just sum = a[0], which is true
+	Therefore the invariant holds before the loop.
+b. Induction:
+	Assume sum = a[0]+...+a[i] holds after the k-th iteration.
+	After k-th iteration i = k, so sumk = a[0]+...+a[k]
+	(k+1)-st iteration:
+		i = k + 1;
+		sum = sumk + a[k+1]
+	After (k+1)-st iteration, sum = a[0]+...+a[k]+a[k+1] = a[0]+...+a[k+1]
+	And so, since i = k+1 after (k+1)-st iteration, sum = a[0]+...+a[i] holds
+	i <= len-1 also holds because if after k-th iteration i = len-1, there wouldn't be a (k+1)-st iteration
+c. Guarantee postcondition:
+	Exit condition is ~(i < len-1) <=> i >= len-1
+	Invariant is (sum = a[0]+...+a[i]) && (i <= len-1)
+	So overall we have (sum = a[0]+...+a[i]) && (i <= len-1) && (i >= len-1)
+	Since i <= len-1 and i >= len-1, this implies i = len-1
+	The precondition gives us a.length = len, so then i = a.length-1
+	Therefore we get the desired postcondition: sum = a[0] + ... + a[a.length-1]
+
+The invariant change didn't really change the code too drastically. The main difference was just that
+the sum starts with the first element and inside the loop it's incrementing i before adding to the sum
+so that the sum will already have the i-th element at the beginning of the next loop (when the invariant
+is checked). Because it was basically exactly the same but just with slightly different ordering and
+start values, it could be proven basically the exact same way.
+
+//=========================================================================
+PROBLEM 2:
+Precondtion: n >= 0
+int power(int m, int n) {
+  int x = m;
+  int y = n;
+  int result = 1;
+  while (y != 0) 
+  	invariant m^n = result * x^y
+  {
+    if (y is even) {
+      x = x*x;
+      y = y/2; 
+    }
+    else {
+      result = result*x;
+      y = y-1;
+    }
+  }
+  return result;
+}
+Postcondition: result = m^n
+
+Proof:
+a. Before the loop:
+	x is initialized to m, y is initialized to n, and result is initialized to 1 so substituting gives (1) * (m)^(n), 
+	which is obviously equal to m^n, so the invariant holds before the loop.
+b. Induction:
+	Assume m^n = result * x^y holds at the end of the k-th iteration, we will show that it holds after the (k+1)-st iteration.
+	During the (k+1)-st iteration there are two possible paths: y is even or y is odd. If y is even, then at the end of
+	the loop iteration x_new = x^2 and y_new = y/2 and result doesn't change, so x_new^y_new should be equal to x^y.
+	Plugging in, we can clearly see that it is, so the invariant holds for this path. (x_new^y_new = (x^2)^(y/2) = x^(2*y/2) = x^y)
+	If y is odd, then at the end of the loop iteration result_new = result*x and y_new = y-1 and x doesn't change.
+	Plugging in gives us result_new * x^y_new = (result * x^1) * x^(y-1) = result * x^(1 + y - 1) = result * x^y, so
+	the invariant holds for this path as well. Since the (k+1)-st iteration must take one of these two paths and the
+	invariant holds for both of them, the invariant holds for the (k+1)-st iteration all together.
+c. Guarantee postcondition:
+	Exit condition: y == 0
+	Invariant: m^n = x^y * result
+	Together, these imply m^n = result * x^0. Since (anything)^0 = 1, this simplifies to/implies m^n = result * 1 --> m^n = result,
+	which is exactly the postcondition we have/need. 
+	
+Decrementing function D = y. If y is even, then y_new = y/2, and y >= y/2 (since y must be >= 0). If y is odd, then 
+y_new = y - 1, and y > y - 1. Therefore y is always decreasing. Also, D = 0 implies the exit condition y = 0.
+
+//=========================================================================
+PROBLEM 3:
+method LoopyFactorial(n: int) returns (u: int)
+  requires n >= 0
+  ensures u == Factorial(n)
+{
+  u := 1;
+  var r := 0;
+  while (r < n) 
+    invariant u == Factorial(r) && r <= n
+  {
+    var v := u;
+    var s := 1;
+    while (s <= r) 
+      invariant u == s*v && s <= r+1
+    {
+      u := u + v;
+      s := s + 1;
+    }
+    assert (u == (r+1)*v); // == Factorial(r+1)
+    r := r + 1;
+  }
+}
+
+Proof (inner loop):
+a. Before the loop:
+	v is initialized to u and s is initialized to 1, so s*v = (1)*(u) = u, so the first part of the invariant holds. 
+	r starts at 0 and only grows through iterations of the outer loop, therefore 0 <= r, and so 1 <= r+1. Before the loop
+	s = 1, so this implies s <= r+1. Therefore the invariant holds before the loop.
+b. Induction:
+	Assume u == s*v && s <= r+1 holds at the end of the k-th iteration, we will show that it holds after the (k+1)-st iteration. 
+	After the (k+1)-st iteration s_new = s + 1 and u_new = u + v. s_new <= r+1 -> s+1 <= r+1 -> s <= r holds because if 
+	s > r at the end of the k-th iteration, there wouldn't have been a (k+1)-st iteration. v doesn't change, so after the
+	(k+1)-st iteration u_new == s_new*v should be true. Plugging in gives (u+v) == (s+1)*v -> u + v == s*v + v -> u == s*v,
+	which we know holds from the k-th iteration, therefore the invariant holds after the (k+1)-st iteration.
+c. Guarantee postcondition:
+	Exit condition: s > r
+	Invariant: u == s*v && s <= r+1
+	s > r && s <= r+1 implies s = r+1, and plugging in gives us the assert/postcondition we want: u == (r+1)*v
+Proof (outer loop):
+a. Before the loop:
+	u is initialized to 1 and r is initialized to 0. The precondition guarantees 0 <= n, so r <= n holds.
+	Factorial(r) = Factorial(0) = 1 = u, so u == Factorial(r) holds, so the invariant holds before the loop.
+b. Induction:
+	Assume u == Factorial(r) && r <= n holds at the end of the k-th iteration, we will show that it holds after the (k+1)-st iteration. 
+	After the (k+1)-st iteration, r_new = r+1 and from the inner loop postcondition u_new = (r+1)*v. Since v is initialized as u
+	and doesn't get changed in the inner loop, we can get u_new = r_new*u. From the invariant after the k-th iteration, we 
+	know that u = Factorial(r), so u_new = r_new*Factorial(r). By the definition of Factorial(x) = x*Factorial(x-1) = x*(x-1)*(x-2)*...*1,
+	we get that u_new = Factorial(r_new) holds after the (k+1)-st iteration. r_new <= n also holds because if r = n at the 
+	end of the k-th iteration, there wouldn't have been a (k+1)-st iteration. Therefore the whole invariant holds after
+	the (k+1)-st iteration.
+c. Guarantee postcondition:
+	Exit condition: r >= n
+	Invariant: u == Factorial(r) && r <= n
+	r >= n && r <= n implies r == n. Plugging into the other part of the invariant gives us u == Factorial(n),
+	which is the postcondition we're looking for.
+
+//=========================================================================
+PROBLEM 4:
+Polynomial Subtraction:
+Precondition: p and q are non-empty arrays, r is an array of length max(p.length, q.length)
+d = 0;
+while ( d != max(p.length, q.length) )
+  invariant: r[i] == (p-q)[i] foreach 0 <= i < d
+{
+  if (d < p.length && d < q.length) { 
+    r[d] = p[d] - q[d];
+  } else if (d < p.length) { 
+    r[d] = p[d];
+  } else {
+    r[d] = -q[d];
+  } 
+  d = d + 1;
+}
+Postcondition: r[i] == (p-q)[i] foreach 0 <= i < r.length
+
+Proof:
+a. Before the loop:
+	The invariant trivially holds because there is no i such that 0 <= i < 0
+b. Induction:
+	Assume the invariant holds at the end of the k-th iteration, we will show that it holds after the (k+1)-st iteration.
+	During the (k+1)-st iteration, the loop body calculates and enters the term for power d (the calculation is slightly
+	different depending on conditions, but r[d] always gets added as the equivalent of (p-q)[d] ), and then increments 
+	d so d_new = d+1. From the end of the k-th iteration, we have that r[i] == (p-q)[i] foreach 0 <= i < d, and we just 
+	added r[d_new-1] such that r[d_new-1] = (p-q)[d_new-1], so adding that on gives that r[i] == (p-q)[i] foreach 0 <= i < d_new,
+	and therefore the invariant holds after the (k+1)-st iteration.
+c. Guarantee postcondition:
+	Exit condition: d == max(p.length, q.length)
+	Invariant: r[i] == (p-q)[i] foreach 0 <= i < d
+	From the precondition we know that r.length = max(p.length, q.length), so d == r.length. Plugging this in to the invariant
+	gives us r[i] == (p-q)[i] foreach 0 <= i < r.length, which is the postcondition we want.
+d. Decrementing function:
+	D = max(p.length, q.length) - d. After each iteration d increases, so D clearly decreases each time. Also, D = 0 
+	implies the exit condition d = max(p.length, q.length).
+
+Polynomial Multiplication:
+Precondition: p and q are non-empty arrays, r is an array of length (p.length + q.length - 1) initialized to all zeros
+i = 0;
+while ( i != p.length )
+  invariant: ???
+{
+  j = 0;
+  while( j != q.length )
+    invariant: ???
+  {
+    r[i+j] = r[i+j] + (p[i] * q[j]);
+    j = j + 1;
+  }
+  i = i + 1;
+}
+Postcondition: ???
+
+Proof:
+a. Before the loop:
+	
+b. Induction:
+	
+c. Guarantee postcondition:
+	
+d. Decrementing function:
+	
+
+Horner Polynomial Evaluation:
+Precondition: a is a non-empty array representation of a polynomial (a.length > 0), x is some given integer
+ord = a.length-1;
+i = ord;
+itr = 0;
+val = a[i];
+while( i > 0 )
+  Invariant: i >= 0 && i + itr == ord && val == a[i]*x^0 + ... + a[i+itr]*x^itr  // val = Summation(a[i+k]*x^k)for k from 0 to itr 
+{
+  val = val * x + a[i-1];
+  i = i - 1;
+  itr = itr + 1;
+}
+Postcondition: val == a[0]*x^0 + ... + a[a.length-1]*x^(a.length-1)  // val = Summation(a[k]*x^k)for k from 0 to a.length-1
+
+Proof:
+a. Before the loop:
+	The precondition gives that a.length > 0, so ord >= 0, and since i is initialized as ord, i >= 0 holds.
+	Before the loop, itr is initialized as 0 and i = ord, so i + itr = ord + 0 = ord, so i + itr == ord holds.
+	At the beginning val is initialized as a[i], and itr = 0 so the invariant summation for val is only one
+	term: val = a[i+0]*x^0 = a[i], so the summation holds before the loop.
+b. Induction:
+	Assume the invariant holds at the end of the k-th iteration, we will show that it holds after the (k+1)-st iteration.
+	After the (k+1)-st iteration, i_new = i-1 and itr_new = itr+1. i >= 0 holds because if i = 0 at the end of the k-th 
+	iteration there wouldn't be a (k+1)-st iteration. i_new + itr_new = ord -> i-1 + itr+1 = ord -> i + itr = ord, which 
+	we know holds from the invariant after the k-th iteration, so i_new + itr_new = ord holds.
+	After the k-th iteration we know val = Summation(a[i+k]*x^k)for k from 0 to itr, and after the (k+1)-st iteration 
+	val_new = val*x + a[i_new]. val*x becomes Summation(a[i_new+k+1]*x^(k+1))for k from 0 to itr.
+	We want it to still be just in terms of a simple variable, so k_new = k+1, and so it becomes Summation(a[i_new+k_new]*x^k_new)for k_new from 1 to itr+1.
+	a[i_new] = a[i_new+0]*x^0, which has k_new = 0, so val_new is now 
+	(Summation(a[i_new+k_new]*x^k_new)for k_new from 1 to itr_new) + a[i_new+k_new]for k_new = 0
+	This combines so val_new = Summation(a[i_new+k_new]*x^k_new)for k_new from 0 to itr_new
+	Therefore the invariant holds for the (k+1)-st iteration.
+c. Guarantee postcondition:
+	Exit condition: i <= 0
+	Invariant: i >= 0 && i + itr == ord && val == Summation(a[i+k]*x^k)for k from 0 to itr
+	i <= 0 && i >= 0 implies i == 0, and so i + itr == ord -> 0 + itr == ord -> itr == ord
+	Substituting i and itr into the last part of the invariant gives val == Summation(a[0+k]*x^k)for k from 0 to ord
+	From the setup, we know that ord = a.length-1, so val == Summation(a[k]*x^k)for k from 0 to a.length-1, which is
+	the postcondition we want.
+d. Decrementing function:
+	D = i. Each iteration decreases i by one, so it's always decrementing. Also D = 0 implies the exit condition i <= 0.
+
+/* eg.
+at beginning: val = 2
+after 1st itr: val = 2*x + 3
+after 2nd itr: val = 2*x^2 + 3*x - 6
+after 3rd itr: val = 2*x^3 + 3*x^2 - 6*x + 2
+after 4th itr: val = 2*x^4 + 3*x^3 - 6*x^2 + 2*x + 1
+*/
+
+
+
+
+
+
+
+

@@ -1,0 +1,200 @@
+Problem 1: Condition Strength
+1. { x is divisible by 5 }
+2. { 0 ≤ x ≤ 5 }
+3. { x > 0 ∨ y > 0 }
+4. { |x| > w }
+5. None.
+6. { x is an A object }
+
+
+Problem 2: Hoare Triples
+1. { x ≤ 0 }
+   y = 2 * x;
+   { y ≤ 1 }
+Valid.
+
+2. { x > y }
+   z = x - y;
+   { z <= 0 }
+Invalid. If x > y then the difference will always be positive.
+To make this valid, either change the precondition to { x < y }
+or change the postcondition to { z > 0 }
+
+3. S stronger than T, T stronger than U, “{Q} code {T}” is valid.
+ — {Q} code {U} is true, because since T is stronger than U
+ — {Q} code {S} is not true. Counterexample: 
+  {Q: x >= 1}, {U: x >= 0}, {T: x > 0}, {S: x > 1}, code: x = x*x
+  If x = 1 at the beginning, it will be 1 at the end and {Q}, {U}, and {T}
+  will be true but {S} will not
+
+
+Problem 3: Forward reasoning with assignment statements
+1. { y > 0 }
+   x = 5;
+   { x = 5 }
+   y = x + 5;
+   { y = 10 }
+   z = -y;
+   { z = -10 }
+   x = z / 2;
+   { x = -5 }
+   y = 0;
+   { y = 0 }
+
+2. { y > x }
+   z = z-x;
+   { z + y > z + x }
+   z = z + 2;
+   { z + y > z + x }
+
+3. { x*x < 100 }
+   x = -x;
+   { -10 < x < 10 }
+   x = x / 2;
+   { -5 < x < 5 }
+   x = x + 5;
+   { 0 < x < 10 }
+
+4. { y is odd }
+   z = y * y;
+   { z is odd && z > 0 }
+   w = z mod 4; 
+   { w = 1 }
+
+
+Problem 4: Backward reasoning with assignment statements
+1. { x <= 0 }
+   x = x + 3;
+   { x <= 3 }
+   y = 3 * x;
+   { y <= 9 }
+
+2. { y <= 2 }
+   x = y - 4;
+   { x + y <= 0 }
+   z = x + y;
+   { z <= 0 }
+
+3. { x > w + 5 }
+   y = 2*w + 10;
+   { 2*x > y }
+   x = 2*x;
+   { x > y }
+
+
+Problem 5: Backward reasoning with if/else statements
+{ (x <= 0 && x < 0) || (x > 0 && x != -1) } = { (x < 0) || (x > 0) } = { x != 0 }
+if (x <= 0)
+    { x < 0 }
+    x = x*x;
+    { x != 0 }
+else
+    { x != -1 }
+    x = x + 1;
+    { x != 0 }
+{ x != 0 }
+Dafny code:
+method Main(x: int) returns (y: int)
+  requires (x <= 0 && x < 0) || (x > 0 && x != -1) //alternatively just x != 0
+  ensures y != 0
+{
+  y := x;
+  if (y <= 0){
+    y := y*y;    
+  } else{
+    y := y + 1;
+  }
+}
+
+
+Problem 6: Wrong weakest precondition for if/else statements
+P: { (x + 1 > 0) && (x - 1 > 0) }
+if (x == 0)
+{
+    x = x + 1; // S1
+} else {
+    x = x - 1; // S2
+}
+Q: { x > 0 }
+If x starts with a value of 0, the first half of P will be true but the second half
+will be false, making the whole thing false because it’s an “and” statement.
+When the code executes, the if will be true so it will execute S1 and make
+x = 1, which is > 0 and so satisfies Q.
+
+
+Problem 7: Verifying Correctness
+1. Precondition is sufficient
+{ x > 1 }
+z = x - 1;
+{ z > 0 }
+w = 2 * z;
+{ w > 0 }
+w = w + 1;
+{w > 1}
+
+2. Precondition is sufficient
+{ y >= w }
+w = w/2;
+{ y >= 2*w }
+x = 2*w + 2;
+{ y + 2 >= x }
+y = y + 2;
+{ y >= x }
+z = y;
+{ z >= x }
+
+3. Precondition is sufficient
+{ y > 0 }
+if (x == y)
+    { y >= 0 }
+    x = -1;
+    { x < y }
+else
+    {true}
+    x = y - 1;
+    { x < y }
+{ x < y }
+
+
+Problem 8: Loops
+1. Invariant: i + s = x + y , Decrement: i
+Dafny code:
+method Main(x: int, y: int) returns (i: int, s: int)
+  requires x >= 0
+  ensures s == x + y
+{
+  i := x;
+  s := y;
+  while(i != 0)
+    invariant s + i == x + y
+    decreases i
+  {
+    s := s + 1;
+    i := i - 1;
+  }
+}
+
+2. Invariant: (0 <= i <= arr.Length) && (forall k :: (0 <= k < i) ==> (arr[k] <= z))
+   Decrement: arr.Length - i
+Dafny code:
+method Main(arr: array<int>) returns (i: int, z: int)
+  requires (arr != null) && (arr.Length > 0)
+  ensures forall k :: (0 <= k < arr.Length) ==> (arr[k] <= z)
+{
+  i := 0;
+  z := 0;
+  while(i < arr.Length)
+    invariant (0 <= i <= arr.Length) && (forall k :: (0 <= k < i) ==> (arr[k] <= z))
+    decreases (arr.Length - i)
+  {
+    if(arr[i] > z){ z := arr[i]; }
+    i := i + 1;
+  }
+}
+
+
+
+
+
+
+

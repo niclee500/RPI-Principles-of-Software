@@ -1,0 +1,13 @@
+1. In retrospect, what could you have done better to reduce the time you spent solving this homework?
+It would have helped if I had done more of the Dafny practice in class, as well as looking at/going
+through more examples from the reading.
+
+2. What could I (the instructor) have done better to improve your learning experience in this homework?
+Dafny is useful, but their provided examples are not particularly helpful. It would be really nice
+if in addition to just going through some in class, you posted some examples of questions fully in
+Dafny code that we could pull up and reference while writing our own. This would help with any 
+formatting quirks, as well as show us what type of thing you're looking for/how ours should look.
+
+3. What do you know now that you wish you had known before beginning the homework?
+The Dafny handbook/tutorial is actually really useful, and you should read it -BEFORE- starting the
+problems and sitting staring at a webpage trying to figure out how to make Dafny do something for a long time.

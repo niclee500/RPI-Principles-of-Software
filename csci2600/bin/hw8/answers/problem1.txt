@@ -1,0 +1,1 @@
+Oversized "God" class, hard-coded cases, no subtyping, methods too big, duplicate code

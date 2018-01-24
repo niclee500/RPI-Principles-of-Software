@@ -1,0 +1,437 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+   <title>CSCI 2600 Homework 1</title>
+</head>
+<body>
+<div id="header">
+<div class="course">CSCI 2600 Principles of Software</div>
+<h1><!-- omit from toc -->
+<span class="head">Homework 1: </span>
+<span class="title">Reasoning About Code</span>
+</h1>
+<h2><!-- omit from toc -->
+<span class="head">Due:</span>
+<span class="due">Friday September 18 @ 1:59pm</span>
+</h2>
+</div>
+
+
+
+<!-- ********************TURNIN INSTRUCTIONS********************** -->
+<h2 id="turnin">Submission Instructions</h2>
+
+<ul>
+	<li>Submit your answers by adding and committing a single .TXT file named <tt>hw1_answers.txt</tt> to the <tt>src/hw1/answers/</tt> directory of your repository. Follow the directions in the version control handout for adding and committing files.</li>
+
+</ul>
+
+
+<h2 id="Problems">Problems</h2>
+
+<p>
+<strong>Directions:</strong>
+</p>
+<ul>
+	<li>Assume that all numerical values are integers, and that integer overflow will never occur.</li>
+	<li>In your answers, you may use any standard symbols for &ldquo;and&rdquo; and &ldquo;or&rdquo; (& and |, &and; and &or;, etc.).</li>
+	<li>If no precondition is required for a code sequence, simply write {true} to denote the trivial precondition.</li>
+</ul>
+
+
+<!-- ************************PROBLEM 1  ************************** -->
+
+<h3 id="Problem6">Problem 1 (6pts, 1pt each): Condition Strength</h3>
+
+<p>Indicate the weakest condition in each set. Note: write "None" if the conditions are unrelated by implication.</p>
+
+<ol>
+        <li>
+        <ul>
+                <li>{ x is divisible by 10 }</li>
+                <li>{ x is divisible by 5 }</li>
+        </ul>
+        <br />
+        </li>
+
+        <li>
+        <ul>                                                                                                                                        
+                <li>{ 0 &le; x &le; 5 }</li>                                                                                               
+                <li>{ 1 &le; x &le; 3 }</li>                                                                                                      
+                <li>{ x = 2 }</li>                                                                                                                  
+        </ul>                                                                                                                                   
+        <br />
+        </li>
+
+        <li>
+        <ul>
+                <li>{ x > 0 &and; y > 0 }</li>
+		<li>{ x > 0 &or; y > 0 }</li>
+        </ul>
+        <br />
+        </li>
+
+        <li>
+        <ul>
+                <li>{ |x| > w }</li>
+                <li>{ x > w }</li>
+        </ul>
+        <br />   
+        </li>
+
+        <li>
+        <ul>
+                <li>{ |x| > |w| }</li>
+                <li>{ x > w }</li>
+        </ul>
+        <br />
+        </li>
+
+
+	<li>
+                <p> Assume the following class hierarchy: C is a subclass of B and B is a subclass of A.</p>
+        <ul>
+                <li>{ x is an A object }</li>
+                <li>{ x is a C object }</li>
+		<li>{ x is a B object }</li>
+
+        </ul>
+        <br />
+	</li>
+
+	
+
+</ol>
+
+<!-- ************************PROBLEM 2  ************************** -->
+
+<h3 id="Problem2">Problem 2 (6pts): Hoare Triples</h3>
+
+<p>State whether each Hoare triple is valid. If it is invalid, explain why and show how you would modify the precondition or postcondition 
+to make it valid.</p>
+
+<ol>
+
+<li>
+<pre>
+{ x &le; 0 }
+y = 2 * x;
+{ y &le; 1 }
+</pre>
+</li>
+
+<li>
+<pre>
+{ x > y }
+z = x - y;
+{ z &le; 0 }
+</pre>
+</li>
+
+</ol>
+
+<p>Let Q, S, T and U be conditions (logical formulae). S is stronger than T and T is stronger than U.
+Let { Q } code { T } be a valid Hoare triple.
+Which of the following are true?</p>
+        <li>
+        <ul>
+                <li>{ Q } code { S }</li>
+		<li>{ Q } code { U }</li>
+        </ul>
+        </li>
+
+<p>If you cannot assert true, then give a counterexample. That is, give concrete values of Q, S, T, U and code that lead to an invalid triple.</p>
+
+
+<!-- ************************PROBLEM 3  ************************** -->
+
+<h3 id="Problem3">Problem 3 (8pts, 2pts each): Forward reasoning with assignment statements</h3>
+
+<p>Find the strongest postcondition of each code sequence inserting the appropriate condition in each blank. The first condition in part (a) is supplied as an example.</p>
+
+<ol>
+
+<li>
+<pre>
+{ y > 0 }
+x = 5;
+<span class="underline" style="color:#FF0000">{ x = 5 }</span>
+y = x + 5;
+{_______________________________}
+z = -y;
+{_______________________________}
+x = z / 2;
+{_______________________________}
+y = 0;
+{_______________________________}
+</pre>
+</li>
+
+<li>
+<pre>
+{ y > x }
+z = z-x;
+{_______________________________}
+z = z + 2;
+{_______________________________}
+</pre>
+</li>
+
+<li>
+<pre>
+{ x*x < 100 }
+x = -x;
+{_______________________________}
+x = x / 2;
+{_______________________________}
+x = x + 5;
+{_______________________________}
+</pre>
+</li>
+
+<li>
+<pre>
+{ y is odd }
+z = y * y;
+{_______________________________}
+w = z mod 4; // x mod y divides x by y and returns the integer remainder. 
+{_______________________________}
+</pre>
+</li>
+
+</ol>
+
+
+<!-- ************************PROBLEM 4  ************************** -->
+
+<h3 id="Problem4">Problem 4 (6pts, 2pts each): Backward reasoning with assignment statements</h3>
+
+<p>Find the weakest precondition of each code sequence by inserting the appropriate condition in each blank.</p>
+
+<ol>
+
+<li>
+<pre>
+{___________________________}
+x = x + 3;
+{___________________________}
+y = 3 * x;
+{ y &le; 9 }
+</pre>
+</li>
+
+<li>
+<pre>
+{___________________________}
+x = y - 4;
+{___________________________}
+z = x + y;
+{ z &le; 0 }
+</pre>
+</li>
+
+<li>
+<pre>
+{___________________________}
+y = 2*w + 10;
+{___________________________}
+x = 2*x;
+{ x > y }
+</pre>
+</li>
+
+</ol>
+
+
+<!-- ************************PROBLEM 5  ************************** -->
+
+<h3 id="Problem5">Problem 5 (2pts): Backward reasoning with if/else statements</h3>
+
+<p>Find the weakest precondition for the conditional statement below using backward reasoning, inserting the appropriate condition in each blank. Verify your answer with Dafny; submit your Dafny code with the answer.
+</p>
+
+<pre>
+{___________________________}
+if (x &le; 0)
+    {___________________________}
+    x = x*x;
+    {___________________________}
+else
+    {___________________________}
+    x = x + 1;
+    {___________________________}
+{x &ne; 0 }
+</pre>
+
+
+<!-- ************************PROBLEM 6  ************************** -->
+
+<h3 id="Problem6">Problem 6 (3.5pts): Wrong weakest precondition for if/else statements (copied from UW's Software Design and Engineering Course)</h3>
+
+<p>Willy Wazoo believes he can simplify the formula for computing the weakest precondtion for if-then-else statements. He proposes to try the equation:</p>
+
+<p>wp(&ldquo;if (b), S1 else S2&rdquo;, Q) = wp(S1, Q) &and; wp(S2, Q)</p>
+
+<p>Consider the following Hoare triple:</p>
+
+<pre>
+<strong>P: {___________________________}</strong>
+if (x == 0)
+{
+<strong>    x = _______________; // S1</strong>
+} else {
+<strong>    x = _______________; // S2</strong>
+}
+<strong>Q: {___________________________}</strong>
+</pre>
+
+
+<ol>
+	<li>Fill in S1, S2 with statements of your choice (but read the rest of this problem before making your choice).</li>
+	<li>Fill in Q with a condition of your choice. Compute P according to Willy's definition.</li>
+	<li>In the space below, give a concrete initial value of x that does not satisfy P, and the corresponding final value of x (resulting from executing the code) that satisfies Q. This shows that Willy's definition does not give the weakest precondition.</li>
+</ol>
+
+
+<!-- ************************PROBLEM 7  ************************** -->
+
+<h3 id="Problem7">Problem 7 (7.5pts, 2.5pts each): Verifying Correctness</h3>
+
+<p>For each block of code, fill in the intermediate conditions, then use them to state whether the precondition is sufficient to guarantee the postcondition. If the precondition is insufficient, explain why and indicate where the conditions don't match up.</p>
+
+<p>Hint: for assignment statements, use backward reasoning to find the weakest precondition that guarantees the postcondition, then see if the given precondition is weaker than the weakest precondition. For if/else statements, you may find a combination of forward and backward reasoning most useful. Follow the rules given in class for what condition to insert at each point. We strongly encourage that you verify your answers with Dafny. (Submission of Dafny code is not requried for this problem.)</p>
+
+<ol>
+
+<li>
+<pre>
+{ x > 1 }
+z = x - 1;
+{___________________________}
+w = 2 * z;
+{___________________________}
+w = w + 1;
+{w > 1}
+</pre>
+</li>
+
+<li>
+<pre>
+{ y &ge; w }
+w = w/2;
+{___________________________}
+x = 2*w + 2;
+{___________________________}
+y = y + 2;
+{___________________________}
+z = y;
+{ z &ge; x }
+</pre>
+</li>
+
+<li> (Copied from UW)
+<pre>
+{ y > 0 }
+if (x == y)
+    {___________________________}
+    x = -1;
+    {___________________________}
+else
+    {___________________________}
+    x = y - 1;
+    {___________________________}
+{ x < y }
+
+</pre>
+</li>
+
+</ol>
+
+
+<!-- ************************PROBLEM 8  ************************** -->
+
+<h3 id="Problem8">Problem 8 (10pts, 5pts each): Loops</h3>
+
+<ol>
+
+<li>
+<p>For the loop below, state a suitable loop invariant and decrementing function. Verify your answer with Dafny. 
+Show your Dafny program text with the answer.</p> 
+<pre>
+{ x &ge; 0 }
+int i = x;
+int s = y;
+while (i != 0) {
+  s = s + 1;
+  i = i - 1; 
+}
+{s = x + y}
+</pre>
+</li>
+
+<li>
+<p>Write a loop that computes the maximal value in a non-empty array of integers. Starter code is given below.
+Again, verify your answer in Dafny and show the Dafny program text.</p>
+<pre>
+{ arr != null &and arr.Length > 0 } /* Precondition using Dafny syntax */ 
+i = 0;
+z = 0;
+while ( ... ) {
+
+  ...
+
+}
+{ forall k :: 0 <= k < arr.Length ==> arr[k] <= z } /* Postcondition using Dafny syntax */
+</pre>
+
+What is your loop invariant? What is your decrementing function?
+
+</li>
+
+</ol>
+
+
+<!-- ***************Collaboration Reflection and Time spent**************** -->
+
+<h3 id="collaboration">Collaboration (0.5pts) </h3>
+<p>Please answer the following questions in a file named <tt>collaboration.txt</tt> in your
+<tt>hw1/answers/</tt> directory.</p>
+<p>
+The standard <a
+href="http://www.cs.rpi.edu/~milanova/csci2600/syllabus.htm">academic integrity policy</a> applies to this homework.
+</p>
+<p>
+State whether or not you collaborated with other students.
+If you did collaborate with other students, state their names and a brief
+description of how you collaborated.
+</p>
+
+<h3 id="reflection">Reflection (0.5pts)</h3>
+
+<p>Please answer the following questions in a file named <tt>reflection.txt</tt> in your
+<tt>hw1/answers/</tt> directory.  Answer briefly, but in enough detail to
+help you improve your own practice via introspection and to enable me to 
+improve Principles of Software in the future.</p>
+<ol>
+ <li>In retrospect, what could you have done better to reduce the time you
+  spent solving this homework?</li>
+  <li>What could I (the instructor) have done better to improve your learning experience
+  in this homework?</li>
+  <li>What do you know now that you wish you had known before beginning the
+  homework?</li>
+</ol>
+
+
+<h2 id="errata">Errata</h2>
+
+<p> None yet.</p>
+
+
+<div class="footer"></div>
+
+</body>
+</html>
+
+

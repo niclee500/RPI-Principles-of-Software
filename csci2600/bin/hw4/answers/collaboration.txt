@@ -1,0 +1,7 @@
+The standard integrity policy applies to this assignment, with the exceptions described in the Introduction.
+
+State whether or not you collaborated with other students. 
+If you did collaborate with other students, state their names and a brief description of how you collaborated.
+
+	I briefly discussed ideas and possibilities for included methods/operations in the high-level design
+	portion (Problem 2) with Richard Lin. Other than that, I didn't collaborate with other students.

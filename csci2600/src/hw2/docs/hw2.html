@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+   <title>CSCI 2600 Homework 2</title>
+</head>
+<body>
+<div id="header">
+<div class="course">CSCI 2600 Principles of Software</div>
+<h1><!-- omit from toc -->
+<span class="head">Homework 2:</span>
+<span class="title">  Reasoning About Loops</span>
+</h1>
+<h2><!-- omit from toc -->
+<span class="head">Due:</span>
+<span class="due">Friday September 25 @ 1:59pm</span>
+</h2>
+</div>
+
+
+<!-- ************************INTRODUCTION************************** -->
+<h2 id="introduction">Introduction</h2>
+
+<p>
+In this assignment you will prove correctness of loops using
+the techniques we discussed in class. Write your answers to problems 1-4 in
+a <strong>text</strong> file <tt>hw2/answers/hw2_answers.txt</tt>.
+</p>
+
+<h2 id="Problems">Problems</h2>
+
+<!-- ************************PROBLEM 1  ************************** -->
+<h3 id="Problem1">Problem 1 (7pts): Computing the Sum of an Integer Array</h3>
+
+<p>
+(Warmup) In lecture, we gave an example
+of an algorithm to find the sum of the integer elements of an array
+<code>a[0..len-1]</code>. Our loop had the following as part of its invariant:
+</p>
+
+<pre>sum = arr[0]+arr[1]+...+arr[i-1]</pre>
+
+<p>
+Suppose we decide to use the following slightly different invariant instead:
+</p>
+
+<pre>sum = arr[0]+arr[1]+...+arr[i]</pre>
+
+<p>
+(The difference is that the upper bound of the array section is <code>i</code>
+instead of <code>i-1</code>.)
+</p>
+
+<p>
+Rework the code in the example to use this new invariant instead of the original one and show that the modified code is correct.
+(You have to use computation induction as we did in class: 1) show invariant holds before loop, 2) show if it held after k-th iteration
+and execution takes a (k+1)-st iteration, invariant still holds, and 3) show that your loop exit condition and the loop invariant
+imply the poscondition, namely that sum = arr[0] + arr[1] + ... + arr[arr.length-1].)
+You do not need to argue termination.
+</p>
+
+<p>
+After solving this problem, give a brief description of how this change to the invariant affected the algorithm. What were the major changes? Did this change  make the code easier or harder to write or prove compared to the original version? Why? (You should keep your answers brief and to the point.)<br />
+</p>
+
+
+<!-- ************************PROBLEM 2  ************************** -->
+<h3 id="Problem2">Problem 2 (10pts): Exponentiation by squaring</h3>
+
+Below is the pseudocode for exponentiation by squaring.
+
+<pre>
+Precondtion: n >= 0
+int power(int m, int n) {
+  int x = m;
+  int y = n;
+  int result = 1;
+  while (y != 0) {
+    if (y is even) {
+      x = x*x;
+      y = y/2; 
+    }
+    else {
+      result = result*x;
+      y = y-1;
+    }
+  }
+  return result;
+}
+Postcondition: result = m^n
+</pre>
+
+ <p>
+ Find a suitable loop invariant and carry the proof. Again, you need to show that 1) the invariant holds before the loop (base case), 2) assuming invariant holds after k-th iteration, and execution takes a k+1-st iteration, the invariant still holds (inductive step), 3) the loop exit condition and the loop invariant imply the postcondition result = m^n.
+ </p>
+ 
+<p>Find a suitable decrementing function. Prove that the function is indeed a decrementing function.
+</p>
+ 
+<!-- ************************PROBLEM 3  ************************** -->
+<h3 id="Problem3">Problem 3 (15pts): Addititve Factorial</h3>
+<p>
+Below we give, in Dafny, the factorial function and a method with loops, 
+which should be computing the factorial of a number as well.
+</p>
+
+<p>
+Fill the annotations at the designated places. As in the example 
+in Lab 2, you can use the function (Factorial) in the annotations. Fill the 
+two loop invariants and the assertion (the assertion states the postcondition
+that holds if the inner loop terminates; this postcondition can help prove 
+partial correctness).
+</p>
+
+<p>Next, prove partial correctness. 
+</p>
+
+<pre>
+function Factorial(n: int): int
+  requires n >= 0
+{
+  if n == 0 then 1 else n * Factorial(n-1)
+}
+
+method LoopyFactorial(n: int) returns (u: int)
+  requires n >= 0
+  ensures u == Factorial(n)
+  {
+    u := 1;
+    var r := 0;
+    while (r < n) 
+      invariant ? YOUR ANSWER HERE
+    {
+      var v := u;
+      var s := 1;
+      while (s<=r) 
+        invariant ? YOUR ANSWER HERE
+      {
+        u:=u+v;
+        s:=s+1;
+      }
+      assert ? YOUR ANSWER HERE 
+      r:=r+1;
+    }
+  }
+</pre>
+
+
+<!--
+<h3 id="Problem3">Problem 3 (15pts): Insertion Sort</h3>
+<p>
+Give an implementation of the algorithm <em>insertion sort</em> and a proof of its correctness. 
+The algorithm should sort an array <code>a</code> containing  <code>n &ge; 0</code> integer values. 
+The precondition is that the array contains  <code>n &ge; 0</code>  integer values in some unknown order. 
+The postcondition is that the array holds a permutation of the original values such that <code>a[0] &le; a[1] &le; ... &le; a[n-1]</code>. 
+Use operation <code>swap(a,i,j)</code> which swaps the i-th and j-th elements of array <code>a</code>. The code for this opeartion, if needed, is in the lecture slides from Tuesday, Feb. 10th.  
+</p>
+
+<p>
+Insertion sort is a well-known sorting method. It starts at the second elment, <code>a[1]</code>. If <code>a[1] < a[0]</code>,
+insertion sort swaps <code>a[1]</code> and <code>a[0]</code>. It looks then at <code>a[2]</code>. If <code>a[2] < a[1]</code>, it swaps <code>a[2]</code> and <code>a[1]</code>; next, if the new <code>a[1]</code> (which was previously <code>a[2]</code>) is <code> < a[0]</code>, insertion sort
+swaps it with <code>a[0]</code>. It then looks at <code>a[3]</code>, etc. The algorithm considers the elements in order, inserting each 
+element into its proper place into the already-sorted array on the left.  
+</p>
+
+<p>Write pseudocode for insertion sort, then annotate the code with precondition, postcondition and suitable invariants for 
+both the inner loop and the outer loop. Show the conditions in curly braces throughout the code as you did in Homework 1. 
+You do not need to carry out the formal proof, however, it should be clear from your annotations that the postcondition
+of insertion sort holds. To help you get started, I have written the sketch of the proof for selection sort, which like insertion
+sort is a popular elementary sorting algorithm: <a href=http://www.cs.rpi.edu/~milanova/csci2600/selection.pdf>here</a>. You can find many 
+useful examples in the University of Washington handout.
+</p>
+-->
+
+<!-- ************************PROBLEM 4  ************************** -->
+<h3 id="Problem4">Problem 4 (17pts): Polynomial Arithmetic</h3>
+
+<p>
+In Homework 3, you will be coding in Java with emphasis on specifications. You will be coding polynomials over
+rational numbers and the algorithms for polynomial addition, subtraction, multiplication, evaluation and others. 
+To help out with Homework 3, you are required to write the pseudocode for those algorithms and prove them
+correct as part of Homework 2.   
+</p>
+
+<p>
+Assume that our polynomials are represented as arrays in the obvious way. E.g., x<sup>4</sup>+3x<sup>3</sup>-6x<sup>2</sup>+2x+1
+will be represented by array <code>p</code> of length 5: [1,2,-6,3,1]. More generally, <code>p[i]</code> stores the coefficient of the
+term of power <code>i</code>.
+</p>
+
+<p>Answer the following questions:</p>
+<ol> 
+  
+  <li> Write a pseudocode algorithm and correctness proof for subtraction. </li>
+  <li> Write a pseudocode algorithm and correctness proof for multiplication. </li>
+  <li> Write a pseudocode algorithm for polynomial evaluation with Horner's rule, and an inductive proof of correctness.<br> 
+  To evaluate a polynomial, say x<sup>4</sup>+3x<sup>3</sup>-6x<sup>2</sup>+2x+1 for given x, we may
+  first compute x<sup>4</sup>, then 3x<sup>3</sup> and add it to the running sum, etc. This clearly
+  requires recomputation of the powers of x. An alternative is to store the powers, but this requires
+  extra space. Horner's rule is a technique which avoids recomputation and extra space. 
+  It alternates between multiplication and addition and allows a degree <code>d</code> polynomial 
+  to be evaluated using <code>d</code> additions and 
+  <code>d</code> multiplications.<br> 
+  Our example polynomial can be written as x(x(x(x + 3) - 6) + 2) + 1. According to Horner's rule,
+  computation proceeds as follows: evaluate x + 3 first, then multiply the result by x, then subtract 6, etc.  
+  Your evaluation algorithm should implement Horner's rule.
+  </li>
+<!---
+  <li> Write a pseudocode algorithm and correctness proof for the <a href="http://mathworld.wolfram.com/LagrangeInterpolatingPolynomial.html">Lagrange interpolation polynomial</a>. Given two parallel arrays of length <code>n</code> specifying the points and the corresponding values, your algorithm should compute the polynomial of degree <code>n-1</code> that is completely determined by these points and values. You must code Lagrange's interpolation formula.
+You can use any algorithm you would like: a naive worst-case cubic algorithm, or a better quadratic one. 
+</li>
+-->
+
+</ol>
+
+To help you get started, we are including pseudocode for the (very simple) polynomial addition
+and a sketch of the proof. This algorithm assumes the array representation of polynomials.
+
+<pre>
+  Precondition: p and q are non-empty arrays, r is an array of length max(p.length, q.length)
+  d = 0;
+  while ( d != max(p.length, q.length) )
+    if (d < p.length && d < q.length) { 
+      r[d]=p[d]+q[d];
+    }
+    else if (d < p.length) { 
+      r[d] = p[d];
+    }
+    else {
+      r[d] = q[d];
+    } 
+    d = d+1;
+  Postcondition: r[i] = (p+q)[i] for each 0 &le; i < result.length
+</pre>
+<p>
+To prove correctness, we must prove partial correctness and termination.
+</p>
+<p>
+Partial correctness. Let <code>(p+q)[i]</code> be the coefficient of the term of power <code>i</code> in
+the desired sum of <code>p</code> and <code>q</code>. A suitable loop invariant is <code>Inv = result[i] = (p+q)[i]</code>, for each <code>i</code> 
+such that <code>0 &le; i < d</code> </p>
+<p>
+1) <code>Inv</code> trivially holds at start of loop, as there is no <code>i</code> such that <code>0 &le; i < -1</code> 
+</p>
+<p>
+2) Assuming <code>Inv</code> holds at the end of k-th iteration, we must show it holds after (k+1)-st iteration:
+After k-th iteration we have the sum up to power <code>d-1</code>. The loop body adds the term for power <code>d</code>
+and increments <code>d</code> by 1. Thus, we have the sum up to power d<sub>new</sub>-1, as needed.
+</p>
+3) We must show that the loop exit condition and the loop invariant imply the postcondition.
+<code>d = max(p.length, q.length) &and; result[i] = (p+q)[i], for 0 &le; i < d</code> implies
+<code>result[i] = (p+q)[i], for 0 &le; i < result.length</code>
+</p>
+<p>Termination. Define decrementing function <code>D = max(p.length, q.length)-d</code>. It clearly decreases
+at each iteration, and also, <code>D=0</code> implies the loop exit condition <code>d=max(p.length, q.length)</code>.
+</p>
+
+<!-- ***************Collaboration Reflection and Time spent**************** -->
+
+<h3 id="collaboration">Collaboration (0.5pts)</h3>
+<p>Please answer the following questions in a file named <tt>collaboration.txt</tt> in your
+<tt>hw2/answers/</tt> directory.</p>
+<p>
+The standard <a
+href="http://www.cs.rpi.edu/~milanova/csci2600/syllabus.htm">academic integrity
+policy</a> applies to this homework.
+</p>
+<p>
+State whether or not you collaborated with other students.
+If you did collaborate with other students, state their names and a brief
+description of how you collaborated.
+</p>
+
+<h3 id="reflection">Reflection (0.5pts)</h3>
+
+<p>Please answer the following questions in a file named <tt>reflection.txt</tt> in your
+<tt>hw2/answers/</tt> directory.  Answer briefly, but in enough detail to
+help you improve your own practice via introspection and to enable me to 
+improve Principles of Software in the future.</p>
+<ol>
+  <li>In retrospect, what could you have done better to reduce the time you
+  spent solving this homework?</li>
+  <li>What could the Principles of Software staff have done better to improve your learning experience
+  in this homework?</li>
+  <li>What do you know now that you wish you had known before beginning the
+  homework?</li>
+</ol>
+
+
+<h2 id="Turnin">Submission</h2>
+<p>
+You should add and commit the following files to SVN:
+</p>
+<ul>
+  <li><tt>hw2/answers/hw2_answers.txt</tt></li>
+  <li><tt>hw2/answers/reflection.txt</tt></li>
+  <li><tt>hw2/answers/collaboration.txt</tt></li>
+</ul>
+
+<h2 id="hints">Hints</h2>
+<p>
+When trying to come up with a loop invariant for prewritten code, it often helps
+to trace through the execution of the code on paper. Choose a few different
+starting values of variables defined outside the block of code (such as
+method arguments), and write down the values of all the variables used in the
+loop for each iteration.
+</p>
+
+
+
+<h2 id="errata">Errata</h2>
+<p>Check the course Announcments page regularly. I'll announce corrections to the homework text on the Announcments page, if they arise. </p>
+
+
+<div class="footer"></div>
+
+</body>
+</html>

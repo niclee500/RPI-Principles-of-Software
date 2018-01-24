@@ -1,0 +1,15 @@
+Please answer the following questions in a file named reflection.txt in your answers/ directory. 
+Answer briefly, but in enough detail to help you improve your own practice via introspection and to 
+enable the course staff to improve Principles of Software in the future.
+
+1. In retrospect, what could you have done better to reduce the time you spent solving this assignment?
+	Talked to other students earlier in the design phase, and also read through the entire assignment at the
+	beginning so I wouldn't get to the required implementation parts (like the GraphWrapper methods) and realize that 
+	it would have been easier to actually specify/implement them if I had slightly tweaked my initial representation.
+
+2. What could the Principles of Software staff have done better to improve your learning experience in this assignment?
+	
+
+3. What do you know now that you wish you had known before beginning the assignment?
+	
+

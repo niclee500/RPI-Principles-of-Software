@@ -1,0 +1,179 @@
+Graph:
+	/**
+	 *	<b>Graph</b> represents a <b>mutable</b> graph of nodes and edges between them.
+	 *
+	 *	Specification fields:
+	 *  	@specfield nodelist		: Collection<String> 	// The list of nodes on the graph
+	 *  	@specfield edgelist		: Collection<Edge>  	// The list of edges on the graph
+	 */
+	
+	/**
+	 *	@effects: creates a new empty Graph
+	 */
+	public Graph(){
+		//TODO: Graph empty constructor
+		throw new RuntimeException();
+	}
+
+	/**
+	 * 	@return: An iterator over the nodelist
+	 */
+	public Iterator<String> nodeIterator(){
+		//TODO: Graph node iterator
+		throw new RuntimeException();
+	}
+
+	/**
+	 * 	@return: An iterator over the edgelist
+	 */
+	public Iterator<Edge> edgeIterator(){
+		//TODO: Graph edge iterator
+		throw new RuntimeException();
+	}
+	
+	/**
+	 *	@param: n The new node to be added
+	 *	@modifies: this
+	 *	@effects: adds the new node to the nodelist
+	 *	@return: true if the node was successfully added to the graph, 
+	 *			false if the node was already on the graph
+	 */
+	public boolean addNode(String n){
+		//TODO: Graph addnode
+		throw new RuntimeException();
+	}
+	
+	/**
+	 *	@param: e The new edge to be added
+	 *	@modifies: this
+	 *	@effects: adds the new edge to the edgelist
+	 *	@throws: NonexistentNode exception if the start-node and/or end-node
+	 *			of e isn't in the graph
+	 *	@return: true if the node was successfully added to the graph, 
+	 *			false if the node was already on the graph
+	 */
+	public boolean addEdge(Edge e){
+		//TODO: Graph addedge
+		throw new RuntimeException();
+	}
+
+	/**
+	 *	@modifies: this
+	 *	@effects: clears the nodelist and edgelist, leaving the graph empty
+	 */
+	public void clear(){
+		//TODO: Graph clear
+		throw new RuntimeException();
+	}
+
+	/**
+	 *	@return: The number of nodes in this graph
+	 */
+	public int getNumNodes(){
+		//TODO: Graph getNumNodes
+		throw new RuntimeException();
+	}
+
+	/**
+	 *	@return: The number of edges in this graph
+	 */
+	public int getNumEdges(){
+		//TODO: Graph getNumEdges
+		throw new RuntimeException();
+	}
+
+	/**
+	 *	@param: n The node to check for on the graph
+	 *	@return: true if node n is on the graph, false otherwise
+	 */
+	public boolean containsNode(String n){
+		//TODO: Graph containsNode
+		throw new RuntimeException();
+	}
+
+	/**
+	 *	@param: e The edge to check for on the graph
+	 *	@return: true if edge e is on the graph, false otherwise
+	 */
+	public boolean containsEdge(Edge e){
+		//TODO: Graph containsNode
+		throw new RuntimeException();
+	}
+	
+	
+	
+	
+Edge:
+	/**
+	 *	<b>Edge</b> represents an <b>immutable</b> directed labeled edge from 
+	 *	one node on a graph to another, with a specified positive weight.
+	 *
+	 *	Specification fields:
+	 *  	@specfield start-node	: String 	// The starting node of the edge.
+	 *  	@specfield end-node		: String 	// The ending node of the edge.
+	 *		@specfield length		: String	// The length/weight of the edge.
+	 */
+
+	/**
+	 *	@param: s The start-node of the new Edge
+	 *	@param: e The end-node of the new Edge
+	 *	@param: l The length of the new Edge
+	 *	@effects: creates a new edge from s to e with length l
+	 */
+	public Edge(String s, String e, String l){
+		//TODO: Edge constructor
+		throw new RuntimeException();
+	}
+	
+	/**
+	 *	@return: true if start-node == end-node, false otherwise
+	 */
+	public boolean isReflexive(){
+		//TODO: Edge isReflexive
+		throw new RuntimeException();
+	}
+	
+	/**
+	 *	Compares two Edges
+	 *	@param: o The Edge to be compared
+	 *	@return: true if this Edge has the same start-node, end-node, and length as o
+	 *			false otherwise (including if o is null or isn't an Edge object) 
+	 */
+	@Override
+	public boolean equals(Object o){
+		//TODO: Edge equals
+		throw new RuntimeException();
+	}
+	
+	/**
+	 *	@return: An integer unique to this Edge and any equal to it
+	 */
+	@Override
+	public int hashCode(){
+		//TODO: Edge hashcode
+		throw new RuntimeException();
+	}
+	
+	/**
+	 *	@return: This Edge's start-node
+	 */
+	public String getStart(){
+		//TODO: Edge getstart
+		throw new RuntimeException();
+	}
+	
+	/**
+	 *	@return: This Edge's start-node
+	 */
+	public String getEnd(){
+		//TODO: Edge getend
+		throw new RuntimeException();
+	}
+	
+	/**
+	 *	@return: This Edge's length/weight
+	 */
+	public int getLabel(){
+		//TODO: Edge getlabel
+		throw new RuntimeException();
+	}

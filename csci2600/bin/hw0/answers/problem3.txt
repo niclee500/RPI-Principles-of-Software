@@ -1,0 +1,16 @@
+1. It failed because it threw an IllegalArgumentException on an input of 0, which should be a valid argument.
+	In the Fibonacci function where it checked the input to see if it was a valid argument (ie. nonnegative),
+	it was checking if the input was <= 0 instead of just < 0, so zero was counted as invalid.
+	
+2. It failed the BaseCase test just because one of the base cases was an input of 0, which was incorrectly 
+	throwing an IllegalArgumentException (question 1). Fixing it for that test also fixed it for the 
+	BaseCase test without any additional tweaks.
+	
+3. It failed because the function returned 1 for input (index) 2, when the output should have been 2.
+	This failed/didn't correctly compute because of two problems in the code. Firstly, the base case section
+	of the code included a case that wasn't the base case. Namely, only indexes 0 and 1 should return 1, but 
+	the code returned 1 for indexes n <= 2 (which incorrectly includes index 2) when it should be for n < 2.
+	Secondly, it was still getting the output/terms wrong because the Fibonacci calculation itself was 
+	incorrect/mistyped so it was returning the difference of the previous two numbers, instead of the sum.
+	ie. Originally it had "return getFibTerm(n - 1) - getFibTerm(n - 2);" when it should have been
+	"return getFibTerm(n - 1) + getFibTerm(n - 2);"

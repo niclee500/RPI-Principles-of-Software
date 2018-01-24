@@ -1,0 +1,2 @@
+I wish I had thought to keep things sorted earlier/beforehand, because while it slows down the general 
+contains/etc methods slightly, it makes up for it in code simplicity during the actual search function.

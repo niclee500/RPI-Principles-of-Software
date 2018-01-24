@@ -1,0 +1,89 @@
+1. Classify each public method of RatNum as a creator, observer, producer or mutator.
+	RatNum(int n) -- creator
+	RatNum(int n, int d) -- creator
+	boolean isNaN() -- observer
+	boolean isNegative() -- observer
+	boolean isPositive() -- observer
+	int compareTo(RatNum rn) -- observer
+	double doubleValue() -- observer
+	int intValue() -- observer
+	float floatValue() -- observer
+	long longValue() -- observer
+	RatNum negate() -- producer
+	RatNum add(RatNum arg) -- producer
+	RatNum sub(RatNum arg) -- producer
+	RatNum mul(RatNum arg) -- producer
+	RatNum div(RatNum arg) -- producer
+	int hashCode() -- observer
+	boolean equals(/*@Nullable*/ Object obj) -- observer
+	String toString() -- observer
+	static RatNum valueOf(String ratStr) -- producer
+
+2. What is the point of the one-line comments inside the add, sub, mul, and div methods?
+	They explain the mathematical reasoning for why the input arguments for the newly created RatNum's 
+	numerator and denominator are what they are.
+
+3. add, sub, mul, and div all require that "arg != null". This is because all of the methods access fields of 'arg' 
+without checking if 'arg' is null first. But the methods also access fields of 'this' without checking for null; 
+why is "this != null" absent from the requires-clause for the methods?
+	You don't need to specify "this != null" inside a member function, because for a member function to be called there
+	must be some object that exists in order to call it, so in order to even get inside the member function "this" can't be null
+
+4. RatNum.div(RatNum) checks whether its argument is NaN (not-a-number). RatNum.add(RatNum) and RatNum.mul(RatNum) do not do that. Explain.
+	A RatNum is defined as NaN if the denominator is 0. add and mul both just do calculations that keep the argument's denominator
+	still in the denominator of the result, so if the argument's denominator is 0 (ie. arg is NaN) then the result's denominator
+	will also be 0 (and so the result would correctly also be NaN). However, the way div mathematically works ends up with the 
+	argument's denominator in the numerator of the result, so result would just compute to 0/something instead of NaN like it should.
+
+5. Why is RatNum.valueOf(String) a static method? What alternative to static methods would allow one to 
+accomplish the same goal of generating a RatNum from an input String?
+	It's static so that we can use the class name to call the method (which creates a new RatNum from a string), instead of
+	needing to already have a RatNum object to call the method if it weren't static.
+	Instead of the static method we could make a new RatNum constructor that took a string argument (as opposed to int n / int n,d)
+	and just did all of the parsing to initialize its member variables.
+
+6. Imagine that the representation invariant were weakened so that we did not require that the numer and denom fields be stored
+in reduced form. This means that the method implementations could no longer assume this invariant held on entry to the method, 
+but they also no longer would be required to enforce the invariant on exit. The new rep invariant would then be:
+  // Rep Invariant for every RatNum r: ( r.denom >= 0 )
+List the method or constructor implementations that would have to change. For each changed piece of code, describe the changes 
+informally, and indicate how much more or less complex (in terms of code clarity and/or execution efficiency) the result 
+would be. Note that the new implementations must still adhere to the given spec; in particular, RatNum.toString() needs 
+to output fractions in reduced form.
+	RatNum(int n, int d) -- It wouldn't NEED to change, but it would no longer be necessary to actually do the reduction to lowest
+	  terms part, so it wouldn't have to call gcd (which would obviously also make it faster/more efficient). This removal would 
+	  also allow the inner if-else to just become an elseif-else part of the original outside if-statement, which would make the code simpler.
+	void checkRep() -- Obviously since the Rep Invariant changed, the check should change accordingly. The second if-statement
+	  (which includes the gcd call) is no longer necessary, so the code would be shorter and faster (because no gcd).
+	int hashCode() -- This creates the hashcode using the actual numerator and denominator of the RatNum, so it would be a different
+	  code for RatNums with reduced vs non-reduced numer and denom, even though they're equal and so should have the same code.
+	  To correct this, it would have to do the gcd call and actual reduction calculation itself before computing the hashcode.
+	  You'd basically be taking the bit removed from the constructor and putting it in here, making it slower and more complicated.
+	boolean equals() -- This compares the actual numer and denom directly between this and the arg, so if they're not reduced they won't
+	  have exactly the same numer and denom. To fix this, it should also check the ratio between each the numers and denoms of 
+	  this and the arg (ie. this.numer/arg.numer == this.denom/arg.denom).
+	String toString() -- Since it needs the numer and denom in reduced form it would have to do the calculation itself, just like hashCode()
+
+7. add, sub, mul, and div all end with a statement of the form return new RatNum ( numerExpr , denomExpr);. 
+Imagine an implementation of the same function except the last statement is:
+  this.numer = numerExpr;
+  this.denom = denomExpr;
+  return this;
+For this question, pretend that the this.numer and this.denom fields are not declared as final so that these assignments compile 
+properly. How would the above changes fail to meet the specifications of the function (Hint: take a look at the @requires and 
+@modifies statements, or lack thereof.) and fail to meet the specifications of the RatNum class?
+	None of the functions have any @modifies specification statements, so all variables are supposed to be guaranteed to be 
+	untouched. The change would also fail to meet the class specifications because RatNum is immutable, so none of its variables
+	should ever change once an object is created, but this alternate implementation changes the numer and denom values.
+
+8. Calls to checkRep are supposed to catch violations in the classes' invariants. In general, it is recommended that one 
+call checkRep at the beginning and end of every method. In the case of RatNum, why is it sufficient to call checkRep only 
+at the end of the constructors? (Hint: could a method ever modify a RatNum such that it violates its representation invariant? 
+Could a method change a RatNum at all? How are changes to instances of RatNum prevented?)
+	RatNum is declared/specified as immutable (specifically the class, numer, and denom are declared as "final"), so after an 
+	instance is created none of its variables can ever be changed or modified, and so if it met the invariant at the end of 
+	the constructor it will still meet it at any other point during execution.
+
+
+
+

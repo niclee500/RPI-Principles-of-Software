@@ -1,0 +1,28 @@
+1. We have chosen the array representation of a polynomial: RatNum[] coeffs, where coeffs[i] stores the coefficient of the 
+term of exponent i. An alternative data representation is the list-of-terms representation: List<Term> terms, where each 
+Term object stores the term's RatNum coefficient and integer exponent. The beauty of the ADT methodology is that we can 
+switch from one representation to the other without affecting the clients of our RatPoly! Briefly list the advantages and 
+disadvantages of the array representation versus the list-of-terms representation.
+	With the arrays, the exponent data gets "updated" automatically since it's just the index of the other
+	values, so there's less data to store and update ourselves. The list representation allows easier size
+	adjustments if we need to make something with a size just a couple of things bigger than the one we have.
+
+2. Where did you include calls to checkRep (at the beginning of methods, the end of methods, the beginning of constructors, 
+the end of constructors, some combination)? Why?
+	I included it mostly at the end of constructors, but also at the beginnings of some of the methods that just get or
+	do something with the data already in the RatPoly (like eval, getCoeff, etc). Just like the RatNum class, RatPoly is immutable,
+	so once created it can't change. This means that it's generally sufficient to just check in the constructors, because 
+	that's the only place where the data actually gets created/changed (just like RatNum).
+
+3. Imagine that the representation invariant of RatPoly was weakened so that we did not require the last element of coeffs 
+to be non-0. This means that the method implementations could no longer assume this invariant held on entry to the method, 
+but they also no longer were required to enforce the invariant on exit. Which method or constructor implementations will change? 
+Please list them. For each changed piece of code, describe the changes informally, and indicate how much more or less complex 
+(in terms of code clarity and/or execution efficiency) the result would be. Note that the new implementations must still adhere to the given spec.
+	sub (and so by by extension add) wouldn't have to worry about coefficients canceling out and needing to resize.
+	RatPolys could also be created with whatever length, as long as any leading (near the end of the coeffs array) coefficients were zero.
+
+
+
+
+

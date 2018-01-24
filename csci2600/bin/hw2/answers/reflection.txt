@@ -1,0 +1,12 @@
+1. In retrospect, what could you have done better to reduce the time you spent solving this homework?
+	Go to office hours or something so I could have gotten suggestions/pointers for finding some of the
+	invariants instead of just spending a long time being stuck myself, I guess? They were just hard/confusing invariants.
+	
+2. What could the Principles of Software staff have done better to improve your learning experience in this homework?
+	It would be nice if there were more examples provided of invariants and strategies to find them, 
+	particularly for various different types of loop setups (like nested loops, etc.)
+
+3. What do you know now that you wish you had known before beginning the homework?
+	Don't forget you can/should use the given/input variables (the ones that should remain constant) in the invariants.
+	Also, include something similar to the loop condition in the invariant to make proving the specific value of 
+	the exit condition much easier.

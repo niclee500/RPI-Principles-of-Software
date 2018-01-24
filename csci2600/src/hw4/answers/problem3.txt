@@ -1,0 +1,79 @@
+When writing the tests, I tried to just go through every method in the classes and write a couple tests
+for each of them. I sort of used the Equivalence Partitioning heuristic, in that I looked at the specification
+and tried to write tests for each of the possibilities for the input.
+
+Initial test idea notes:
+
+Edge:
+	constructor:
+	-negative weight
+	-same start+end node
+	-normal
+	
+	isReflexive:
+	-several true
+	-several false
+	
+	getStart / getEnd / getLabel:
+	-test several values for each
+	
+	equals + hashCode:
+	-o is null
+	-o isn't an Edge object
+	-reflexive x=x
+	-symmetric x=y -> y=x
+	-same start+end but different label
+	-same start+label but different end
+	-same end+label but different start
+	
+	
+Graph:
+	constructor:
+	-just call it a couple times
+	
+	nodeIterator and edgeIterator:
+	-several nodes and edges
+	
+	clear:
+	-empty graph
+	-several nodes and several edges
+	
+	addNode:
+	-duplicate node
+	-several normal nodes
+	
+	addEdge:
+	-duplicate edge
+	-several normal edges
+	
+	getNumNodes / getNumEdges:
+	-no nodes/edges
+	-single node/edge
+	-multiple nodes/edges
+	
+	containsNode / containsEdge:
+	-empty graph
+	-does contain node/edge
+	-doesn't contain node/edge
+	
+	
+	
+Added after implementation:
+Graph:
+	addEdge:
+	-try to add invalid edge
+	---startnode isn't in the graph
+	---endnode isn't in the graph
+	---neither edge node is in the graph
+
+GraphWrapper: 
+	addEdge:
+	-invalid edges
+	
+	listChildren:
+	-node has no children
+	-node has one child
+
+
+
+	

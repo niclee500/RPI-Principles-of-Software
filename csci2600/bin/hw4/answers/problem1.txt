@@ -1,0 +1,22 @@
+1. Write the abstraction function and representation invariant, referring to the source code 
+provided in the hw4/IntPriorityQueue.java file of your homework.
+
+2. The code in hw4/IntPriorityQueue.java can lead to representation exposure. Explain what can 
+go wrong and propose a solution.
+	The constructor that takes in a list to initialize the priorityqueue right away just assigns
+	the internal list to the given one. This doesn't create a new list, it just uses the given one
+	inside the priorityqueue, which allows for rep-exposure if the client holds onto and changes
+	the list that it fed in as a parameter. To fix this, that constructor should actively create a
+	new list as its internal list and copy the values (or use the ArrayList copy constructor) into
+	the new list.
+
+3. Write a checkRep method and insert calls to checkRep at all appropriate places in hw4/IntPriorityQueue.java.
+
+4. Below are several snapshots of an IntPriorityQueue object's internal state at different points in a program. 
+Which snapshots are equivalent to each other at the abstract level?
+	a) heap = [Integer.MAX_VALUE,4,2,3,2,4] and size = 3
+	b) heap = [Integer.MAX_VALUE,4,2,3] and size = 3
+	c) heap = [Integer.MAX_VALUE,4,3,2] and size = 3
+	d) heap = [Integer.MAX_VALUE,5,4,3,3,1] and size = 5
+	
+	b) and c) are equivalent
